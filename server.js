@@ -3,7 +3,7 @@ const bodyparser = require("body-parser");
 
 var mysql = require('mysql2');
 const app = express();
-
+require('dotenv').config()
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(express.static("public"));
@@ -15,7 +15,7 @@ var sqlcon = mysql.createConnection({
   database:"hell"
 });
 
-
+const port= process.env.PORT;
 
 sqlcon.connect(async function(err) {
     if (err) throw err;
@@ -163,6 +163,6 @@ app.get("/dashboard/:email",async (req,res)=>{
 })
 
 
-app.listen(3000 ,()=>{
-  console.log("server started");
+app.listen(port ,()=>{
+  console.log("server started "+port);
 });
