@@ -68,8 +68,9 @@ app.post("/signup",async (req,res)=>{
         sqlcon.query(query, function (err, result) {
           if (!err){
             console.log("1 record inserted");
-            res.json({status:200,
-            msg:"successfully added to database"});
+            // res.json({status:200,
+            // msg:"successfully added to database"});
+            res.redirect("/dashboard/"+req.body.email);
   
           }else{
             res.json({status:"Internel server error",
@@ -104,15 +105,16 @@ app.get("/login",(req,res)=>{
   console.log(req.body);
   if(typeof( req.body.password)!='undefined' && typeof( req.body.email)!='undefined'){
     var query= "SELECT * FROM user WHERE email = '"+req.body.email+"' AND password = '"+req.body.password+"';";
-    console.log(query);
+    // console.log(query);
     sqlcon.query(query, function (err, result) {
       if (!err){
         // console.log(result);
         if(result.length!=0){
-          res.json({
-            status:"Authenticated",
-            msg:"user found"
-          });
+          // res.json({
+          //   status:"Authenticated",
+          //   msg:"user found"
+          // });
+          res.redirect("/dashboard/"+req.body.email);
         }else{
           res.json({
             status:"Unautherised",
@@ -132,6 +134,33 @@ app.get("/login",(req,res)=>{
     msg:"One of the field Found Missing"});
 }
 });
+
+//dashboard
+app.get("/dashboard/:email",async (req,res)=>{
+  const email=req.params['email'];
+  console.log(email);
+  var query= "SELECT * FROM user WHERE email = '"+email+"';";
+
+  sqlcon.query(query, function (err, result) {
+    if (!err){
+      // console.log(result);
+      if(result.length!=0){
+        res.send("<center><h1>Dashboard</h1><p>email  -  "+result[0].email+"</p><p>fname  -  "+result[0].fname+"</p><p>lname  -  "+result[0].lname+"</p><p>password  -  "+result[0].password+"</center>");
+      }else{
+        res.json({
+          status:"Unautherised",
+          msg:"no such user found"
+        });
+      }
+    }else{
+      res.json({status:"Internel server error",
+          msg:"something wrong in backend"});
+
+    }
+  });
+  
+
+})
 
 
 app.listen(3000 ,()=>{
