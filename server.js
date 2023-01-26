@@ -65,18 +65,40 @@ app.post("/signup",async (req,res)=>{
       console.log(query);
 
       try {
-        sqlcon.query(query, function (err, result) {
+        var query2="SELECT * FROM user WHERE email = '"+req.body.email+"';";
+
+        sqlcon.query(query2, function (err, resu) {
           if (!err){
-            console.log("1 record inserted");
-            // res.json({status:200,
-            // msg:"successfully added to database"});
-            res.redirect("/dashboard/"+req.body.email);
+            if(resu.length!=0){
+              res.json({status:"user found",
+              msg:"user already exists"});
+            }else{
+              sqlcon.query(query, function (err, result) {
+                if (!err){
+                  console.log("1 record inserted");
+
+                  // res.json({status:200,
+                  // msg:"successfully added to database"});
+                  
+                  res.redirect("/dashboard/"+req.body.email);
+        
+                }else{
+                  res.json({status:"Internel server error",
+                  msg:"something wrong in backend"});
+                }
+              });
+
+
+
+            }
   
           }else{
             res.json({status:"Internel server error",
             msg:"something wrong in backend"});
           }
         });
+
+
         
       } catch (error) {
         console.log("error:"+error);
