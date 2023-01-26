@@ -6,7 +6,7 @@ const app = express();
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
-
+app.use(express.static("public"));
 
 var sqlcon = mysql.createConnection({
   host: "localhost",
@@ -87,17 +87,19 @@ app.post("/signup",async (req,res)=>{
   }
 
 }).get("/signup",(req,res)=>{
-    res.json({
-      status:200,
-      msg:"ready to signup"
-    })
+    // res.json({
+    //   status:200,
+    //   msg:"ready to signup"
+    // });
+    res.sendFile(__dirname+"/public/signup.html");
 });
 
 app.get("/login",(req,res)=>{
-  res.json({
-    status:200,
-    msg:"ready to login"
-  })
+  // res.json({
+  //   status:200,
+  //   msg:"ready to login"
+  // })
+  res.sendFile(__dirname+"/public/login.html");
 }).post("/login",(req,res)=>{
   console.log(req.body);
   if(typeof( req.body.password)!='undefined' && typeof( req.body.email)!='undefined'){
@@ -105,7 +107,7 @@ app.get("/login",(req,res)=>{
     console.log(query);
     sqlcon.query(query, function (err, result) {
       if (!err){
-        console.log(result);
+        // console.log(result);
         if(result.length!=0){
           res.json({
             status:"Authenticated",
