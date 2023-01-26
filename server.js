@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyparser = require("body-parser");
-
+const bcrypt=require("bcrypt");
 var mysql = require('mysql2');
 const app = express();
+
 require('dotenv').config()
+
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(express.static("public"));
@@ -57,11 +59,20 @@ app.get("/",(req,res)=>{
 
 app.post("/signup",async (req,res)=>{ 
   console.log(req.body);
+  var hashedpassword;
   if(typeof(req.body.fname)!='undefined' 
   && typeof( req.body.password)!='undefined' && typeof( req.body.email)!='undefined' 
   && typeof( req.body.lname)!='undefined'){
 
-      var query = "INSERT INTO user VALUES ('"+req.body.fname+"','"+req.body.lname+"','"+req.body.password+"','"+req.body.email+"');";
+
+      bcrypt.hash(req.body.password,process.env.SALT,(err,hash)=>{
+        hashedpassword=hash;
+      });
+      
+      var query = "INSERT INTO user VALUES ('"+req.body.fname+"','"+req.body.lname+"','"+
+      req.body.password
+      // hashedpassword
+      +"','"+req.body.email+"');";
       console.log(query);
 
       try {
