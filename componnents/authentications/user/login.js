@@ -1,11 +1,14 @@
 const express=require("express");
 const bcrypt = require("bcrypt");
-const sqlcn=require("../databasevariables/sqlcon");
+const sqlcon=require("../../databasevariables/sqlcon");
 const mysql = require("mysql2");
-// import '../../server.js';
-const sqlcon = sqlcn;
+const path=require("../../../path");
+
+
+
+// const sqlcon = sqlcn;
 const result={
-login: async (req,res)=>{
+post: async (req,res)=>{
     console.log(req.body);
     var hashedpassword;
     if(typeof( req.body.password)!='undefined' && typeof( req.body.email)!='undefined'){
@@ -25,7 +28,7 @@ login: async (req,res)=>{
             //   status:"Authenticated",
             //   msg:"user found"
             // });
-            res.redirect("/dashboard/"+req.body.email);
+            res.redirect("dashboard/"+req.body.email);
           }else{
             res.json({
               status:"Unautherised",
@@ -44,6 +47,13 @@ login: async (req,res)=>{
       res.json({status:"Invalid",
       msg:"One of the field Found Missing"});
   }
+  },
+  get:(req,res)=>{
+    // res.json({
+    //   status:200,
+    //   msg:"ready to login"
+    // })
+    res.sendFile(path+"/public/login.html");
   }
 }
 

@@ -1,11 +1,11 @@
 const express=require("express");
 const bcrypt = require("bcrypt");
-const sqlcn=require("../databasevariables/sqlcon");
+const sqlcn=require("../../databasevariables/sqlcon");
 const mysql = require("mysql2");
 // import '../../server.js';
 const sqlcon = sqlcn;
 const result={
-dashboard: async (req,res)=>{
+get: async (req,res)=>{
     const email=req.params['email'];
     console.log(email);
     var query= "SELECT * FROM user WHERE email = '"+email+"';";

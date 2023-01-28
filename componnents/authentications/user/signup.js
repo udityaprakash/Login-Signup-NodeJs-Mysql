@@ -1,11 +1,12 @@
 const express=require("express");
 const bcrypt = require("bcrypt");
-const sqlcn=require("../databasevariables/sqlcon");
+const sqlcn=require("../../databasevariables/sqlcon");
+const path=require("../../../path");
 const mysql = require("mysql2");
 // import '../../server.js';
 const sqlcon = sqlcn;
 const result={
-signup: async (req,res)=>{ 
+post: async (req,res)=>{ 
     console.log(req.body);
     var hashedpassword;
     if(typeof(req.body.fname)!='undefined' 
@@ -39,7 +40,7 @@ signup: async (req,res)=>{
                     // res.json({status:200,
                     // msg:"successfully added to database"});
                     
-                    res.redirect("/dashboard/"+req.body.email);
+                    res.redirect("dashboard/"+req.body.email);
           
                   }else{
                     res.json({status:"Internel server error",
@@ -68,7 +69,16 @@ signup: async (req,res)=>{
         msg:"One of the field Found Missing"});
     }
   
+  },
+  get:(req,res)=>{
+    // res.json({
+      //     //   status:200,
+      //     //   msg:"ready to signup"
+      //     // });
+
+    console.log(path+"/public/signup.html");
+    res.sendFile(path+"/public/signup.html");
   }
-}
+};
 
 module.exports = result;
