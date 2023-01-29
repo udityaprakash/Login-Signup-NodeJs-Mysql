@@ -129,7 +129,17 @@ post: async (req,res)=>{
             from: 'udityap.davegroup@gmail.com',
             to: email,
             subject: 'Verify Email from DAWAY',
-            text: 'Your OTP is '+otp+'.'
+            // text: 'Your OTP is '+otp+'.'
+            html: `
+        <div
+          class="container"
+          style="max-width: 90%; margin: auto; padding-top: 20px"
+        >
+          <h2>Welcome to DAWAY.</h2>
+          <h4>Greatings of the day </h4>
+          <p style="margin-bottom: 30px;">Please enter the OTP to get started</p>
+          <h1 style="font-size: 40px; letter-spacing: 2px; text-align:center;">${otp}</h1>
+     </div>`
           };
       
           transporter.sendMail(mailOptions, function(error, info){
@@ -161,7 +171,7 @@ post: async (req,res)=>{
         if (!err && resu[0].verify==false){
           if(resu.length!=0){
             if(resu[0].otp==otp){
-              var query2="UPDATE user SET verify = "+ true + " AND otp = "+ null +" WHERE email = '" + email + "';" ;
+              var query2="UPDATE user SET verify = "+ true + " , otp = "+ null +" WHERE email = '" + email + "';" ;
 
               sqlcon.query(query2, function (err, result) {
                 if (err) throw err;

@@ -21,13 +21,21 @@ post: async (req,res)=>{
         if (!err){
           if(result.length!=0){
             if(result[0].password==password){
-              // res.status(200).json({
-              //   status:true,
-              //   msg:"User Exist"
-              // });
-              res.redirect("dashboard/"+
-              email
-              );
+              if(result[0].verify==true){
+                // res.status(200).json({
+                //   status:true,
+                //   msg:"User Exist"
+                // });
+                res.redirect("dashboard/"+
+                email
+                );
+
+              }else{
+                res.redirect("signup/verifyotp/"+
+                email
+                );
+
+              }
 
             }else{
               res.status(401).json({
