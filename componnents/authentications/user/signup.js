@@ -37,7 +37,7 @@ post: async (req,res)=>{
         var verify= false;
         email=email.toLowerCase();
         const id= crypto.randomBytes(3*4).toString('base64');
-        var query = "INSERT INTO user VALUES ('"+id+"','"+fname+"','"+lname+"','"+
+        var query = "INSERT INTO user (id , fname , lname , password , email , verify) VALUES ('"+id+"','"+fname+"','"+lname+"','"+
         password
         // hashedpassword
         +"','"+email+"',"+verify+");";
@@ -102,32 +102,99 @@ post: async (req,res)=>{
 
     res.sendFile(path+"/public/signup.html");
   },
-  verifyotp:async (req,res)=>{
+
+  verifyotp : async (req,res)=>{
     let email=req.params['email'];
     console.log(process.env.EMAILPASSWORD,email);
     let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets:false});
-    var mailOptions = {
-      from: 'udityap.davegroup@gmail.com',
-      to: email,
-      subject: 'Verify Email from DAWAY',
-      text: 'Your OTP is '+otp+'.'
-    };
+    var query="UPDATE user SET otp = "+ otp + " WHERE email = '" + email + "';" ;
+    var query2="SELECT * FROM user WHERE email = '"+email+"';";
 
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log("not send :"+error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
+      sqlcon.query(query2, function (err, resu) {
+        if(resu[0].verify==true){
+          res.json({
+            success:false,
+            msg:"user already verified"
+          })
+        }else{
 
-    res.sendFile(path+"/public/signupotpverification.html");
+
+          sqlcon.query(query, function (err, result) {
+            if (err) throw err;
+            console.log(result.affectedRows + " record(s) updated");
+          });
+      
+      
+          var mailOptions = {
+            from: 'udityap.davegroup@gmail.com',
+            to: email,
+            subject: 'Verify Email from DAWAY',
+            text: 'Your OTP is '+otp+'.'
+          };
+      
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log("not send :"+error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+      
+          res.sendFile(path+"/public/signupotpverification.html");
+
+
+
+
+        }
+      });
+
 
   },
-  checkotp:(req,res)=>{
-    const otp=req.param.otp;
-    console.log(otp);
+  checkotp:async (req,res)=>{
+    const {otp}=req.body;
+    const email= req.params['email'];
+
+    if(Emailvalidator.validate(email)){
+      var query="SELECT * FROM user WHERE email = '"+email+"';";
+
+      sqlcon.query(query, function (err, resu) {
+        if (!err && resu[0].verify==false){
+          if(resu.length!=0){
+            if(resu[0].otp==otp){
+              var query2="UPDATE user SET verify = "+ true + " AND otp = "+ null +" WHERE email = '" + email + "';" ;
+
+              sqlcon.query(query2, function (err, result) {
+                if (err) throw err;
+                console.log(result.affectedRows + " record(s) updated and user verified");
+              });
+
+
+
+              res.json({success:true,
+              msg:"user verified successfully"});
+
+            }else{
+              res.json({success:false,
+              msg:"Invalid OTP"});
+              
+            }
+
+
+
+          }else{
+            res.json({success:false,
+              msg:"user doesn't exist"});
+
+          }
+        }else{
+          res.json({success:false,
+          msg:"user is already verified"});
+        }
+      });
+
+
   }
+}
 };
 
 module.exports = result;

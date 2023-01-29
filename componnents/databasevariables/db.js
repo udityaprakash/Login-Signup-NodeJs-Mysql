@@ -17,7 +17,7 @@ const connectDB = async () => {
               console.log("Database created");
             });
         
-            const tableschema="CREATE TABLE user (id VARCHAR(20),fname VARCHAR(255),lname VARCHAR(255),password VARCHAR(255), email VARCHAR(255),verify BOOLEAN, PRIMARY KEY (email));";
+            const tableschema="CREATE TABLE user (id VARCHAR(20),fname VARCHAR(255),lname VARCHAR(255),password VARCHAR(255), email VARCHAR(255) ,otp MEDIUMINT(255),verify BOOLEAN, PRIMARY KEY (email));";
         
             
             sqlcon.query("show tables from hell",async (err,result)=>{
