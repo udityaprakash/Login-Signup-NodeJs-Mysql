@@ -17,36 +17,45 @@ post: async (req,res)=>{
       });
       var query= "SELECT * FROM user WHERE email = '"+
       email
-      +"' AND password = '"+
-      password
-      // hashedpassword
       +"';";
       sqlcon.query(query, function (err, result) {
         if (!err){
           if(result.length!=0){
-            // res.json({
-            //   status:"Authenticated",
-            //   msg:"user found"
-            // });
-            res.redirect("dashboard/"+
-            email
-            );
+            if(result[0].password==password){
+              // res.status(200).json({
+              //   status:true,
+              //   msg:"User Exist"
+              // });
+              res.redirect("dashboard/"+
+              email
+              );
+
+            }else{
+              res.status(401).json({
+                success:false,
+                msg:"Password don't match"
+              });
+
+            }
+
+
           }else{
-            res.json({
-              status:"Unautherised",
-              msg:"no such user found"
+            res.status(404).json({
+              success:false,
+              msg:"Email ID don't exist"
             });
           }
         }else{
-          res.json({status:"Internel server error",
-              msg:"something wrong in backend"});
+          res.status(500).json({success:false,
+              msg:"Internal Server Database error",
+              err:err});
   
         }
       });
   
   
     }else{
-      res.json({status:"Invalid",
+      res.status(400).json({success:false,
       msg:"One of the field Found Missing"});
   }
   },
