@@ -1,18 +1,8 @@
-// import mysql from 'mysql2';
-// import result from '../authentications/signup';
 const express = require("express");
 var mysql = require('mysql2');
-const sqlcn=require("./sqlcon");
+const sqlcon=require("./sqlcon");
 const app = express();
 
-
-// var sqlcon = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "Akgec@9838",
-//     database:"hell"
-// });
-const sqlcon = sqlcn;
 const connectDB = async () => {
     
     
@@ -49,6 +39,6 @@ const connectDB = async () => {
         
           });
     }
-// }  
+
 
 module.exports=connectDB;

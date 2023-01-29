@@ -6,29 +6,31 @@ const path=require("../../../path");
 
 
 
-// const sqlcon = sqlcn;
 const result={
 post: async (req,res)=>{
     console.log(req.body);
+    let {email , password} = req.body;
     var hashedpassword;
-    if(typeof( req.body.password)!='undefined' && typeof( req.body.email)!='undefined'){
-      bcrypt.hash(req.body.password,process.env.SALT,(err,hash)=>{
+    if(email && password){
+      bcrypt.hash(password,process.env.SALT,(err,hash)=>{
         hashedpassword=hash;
       });
-      var query= "SELECT * FROM user WHERE email = '"+req.body.email+"' AND password = '"+
-      req.body.password
+      var query= "SELECT * FROM user WHERE email = '"+
+      email
+      +"' AND password = '"+
+      password
       // hashedpassword
       +"';";
-      // console.log(query);
       sqlcon.query(query, function (err, result) {
         if (!err){
-          // console.log(result);
           if(result.length!=0){
             // res.json({
             //   status:"Authenticated",
             //   msg:"user found"
             // });
-            res.redirect("dashboard/"+req.body.email);
+            res.redirect("dashboard/"+
+            email
+            );
           }else{
             res.json({
               status:"Unautherised",

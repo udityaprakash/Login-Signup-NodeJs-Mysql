@@ -12,7 +12,6 @@ get: async (req,res)=>{
   
     sqlcon.query(query, function (err, result) {
       if (!err){
-        // console.log(result);
         if(result.length!=0){
           res.send("<center><h1>Dashboard</h1><p>email  -  "+result[0].email+"</p><p>fname  -  "+result[0].fname+"</p><p>lname  -  "+result[0].lname+"</p><p>password  -  "+result[0].password+"</center>");
         }else{

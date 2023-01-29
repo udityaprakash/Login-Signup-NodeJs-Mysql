@@ -1,31 +1,30 @@
 const express=require("express");
 const bcrypt = require("bcrypt");
-const sqlcn=require("../../databasevariables/sqlcon");
+const sqlcon=require("../../databasevariables/sqlcon");
 const path=require("../../../path");
 const mysql = require("mysql2");
 // import '../../server.js';
-const sqlcon = sqlcn;
+
+
+
 const result={
 post: async (req,res)=>{ 
     console.log(req.body);
+    let {fname , lname ,password , email}= req.body;
     var hashedpassword;
-    if(typeof(req.body.fname)!='undefined' 
-    && typeof( req.body.password)!='undefined' && typeof( req.body.email)!='undefined' 
-    && typeof( req.body.lname)!='undefined'){
+    if(fname && lname && password && email){
   
-  
-        bcrypt.hash(req.body.password,process.env.SALT,(err,hash)=>{
+        bcrypt.hash(password,process.env.SALT,(err,hash)=>{
           hashedpassword=hash;
         });
   
-        var query = "INSERT INTO user VALUES ('"+req.body.fname+"','"+req.body.lname+"','"+
-        req.body.password
+        var query = "INSERT INTO user VALUES ('"+fname+"','"+lname+"','"+
+        password
         // hashedpassword
-        +"','"+req.body.email+"');";
-        console.log(query);
+        +"','"+email+"');";
   
         try {
-          var query2="SELECT * FROM user WHERE email = '"+req.body.email+"';";
+          var query2="SELECT * FROM user WHERE email = '"+email+"';";
   
           sqlcon.query(query2, function (err, resu) {
             if (!err){
@@ -40,7 +39,7 @@ post: async (req,res)=>{
                     // res.json({status:200,
                     // msg:"successfully added to database"});
                     
-                    res.redirect("dashboard/"+req.body.email);
+                    res.redirect("dashboard/"+email);
           
                   }else{
                     res.json({status:"Internel server error",
@@ -76,7 +75,6 @@ post: async (req,res)=>{
       //     //   msg:"ready to signup"
       //     // });
 
-    console.log(path+"/public/signup.html");
     res.sendFile(path+"/public/signup.html");
   }
 };
