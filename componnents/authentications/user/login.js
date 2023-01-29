@@ -15,9 +15,8 @@ post: async (req,res)=>{
       bcrypt.hash(password,process.env.SALT,(err,hash)=>{
         hashedpassword=hash;
       });
-      var query= "SELECT * FROM user WHERE email = '"+
-      email
-      +"';";
+      email=email.toLowerCase();
+      var query= "SELECT * FROM user WHERE email = '"+email+"';";
       sqlcon.query(query, function (err, result) {
         if (!err){
           if(result.length!=0){
@@ -33,7 +32,7 @@ post: async (req,res)=>{
             }else{
               res.status(401).json({
                 success:false,
-                msg:"Password don't match"
+                msg:"Password incorrect"
               });
 
             }
