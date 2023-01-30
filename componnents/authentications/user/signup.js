@@ -4,7 +4,7 @@ const sqlcon=require("../../databasevariables/sqlcon");
 const path=require("../../../path");
 const mysql = require("mysql2");
 var Emailvalidator = require("email-validator");
-const crypto= require("crypto");
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config()
 const nodemailer=require("nodemailer");
 const otpGenerator = require('otp-generator');
@@ -36,7 +36,9 @@ post: async (req,res)=>{
         });
         var verify= false;
         email=email.toLowerCase();
-        const id= crypto.randomBytes(3*4).toString('base64');
+        // const id= crypto.randomBytes(3*4).toString('base64');
+        const id = uuidv4();
+        // console.log(id);
         var query = "INSERT INTO user (id , fname , lname , password , email , verify) VALUES ('"+id+"','"+fname+"','"+lname+"','"+
         password
         // hashedpassword
@@ -198,8 +200,11 @@ post: async (req,res)=>{
 
 
 
-              res.json({success:true,
-              msg:"user verified successfully"});
+              res.json({
+                success:true,
+                token:resu[0].id,
+                msg:"user verified successfully"
+              });
 
             }else{
               res.json({success:false,

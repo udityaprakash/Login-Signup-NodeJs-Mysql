@@ -6,9 +6,9 @@ const mysql = require("mysql2");
 const sqlcon = sqlcn;
 const result={
 get: async (req,res)=>{
-    const email=req.params['email'];
-    console.log(email);
-    var query= "SELECT * FROM user WHERE email = '"+email+"';";
+    const id=req.params['id'];
+    // console.log(id);
+    var query= "SELECT * FROM user WHERE id = '"+id+"';";
   
     sqlcon.query(query, function (err, result) {
       if (!err){

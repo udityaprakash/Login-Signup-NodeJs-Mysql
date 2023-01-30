@@ -27,7 +27,7 @@ post: async (req,res)=>{
                 //   msg:"User Exist"
                 // });
                 res.redirect("dashboard/"+
-                email
+                result[0].id
                 );
 
               }else{

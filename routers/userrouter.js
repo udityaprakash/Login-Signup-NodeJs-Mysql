@@ -19,7 +19,7 @@ router.post('/login',login.post);
 router.get('/login',login.get);
 
 //--user/dashboard
-router.get('/dashboard/:email',dashboard.get);
+router.get('/dashboard/:id',dashboard.get);
 
 
 
