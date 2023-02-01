@@ -107,7 +107,7 @@ post: async (req,res)=>{
 
   verifyotp : async (req,res)=>{
     let email=req.params['email'];
-    console.log(process.env.EMAILPASSWORD,email);
+    // console.log(process.env.EMAILPASSWORD,email);
     let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets:false});
     var query="UPDATE user SET otp = "+ otp + " WHERE email = '" + email + "';" ;
     var query2="SELECT * FROM user WHERE email = '"+email+"';";
