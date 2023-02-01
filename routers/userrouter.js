@@ -2,7 +2,7 @@ const router = require("express").Router();
 const signup = require("../componnents/authentications/user/signup");
 const login= require("../componnents/authentications/user/login");
 const dashboard=require("../componnents/dashboard/user/dashboard");
-
+const forgetpass=require("../componnents/authentications/user/forgetpass");
 
 
 //--user/signup
@@ -17,6 +17,9 @@ router.post('/signup/verifyotp/:email',signup.checkotp);
 //--user/login
 router.post('/login',login.post);
 router.get('/login',login.get);
+router.get("/login/forgetpass",forgetpass.get_enteremail);
+router.post("/login/forgetpass",forgetpass.post_enteremail);
+
 
 //--user/dashboard
 router.get('/dashboard/:id',dashboard.get);
