@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const bodyparser = require("body-parser");
 const bcrypt=require("bcrypt");
@@ -16,8 +14,6 @@ app.use(express.static("public"));
 
 //routes
 app.use('/user',require('./routers/userrouter'));
-// app.use('/admin',require('./routers/adminrouter'));
-// app.use('/instructor',require('./routers/instructorrouter'));
 
 const port= process.env.PORT;
 // console.log(process.env.SALT);
